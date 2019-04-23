@@ -55,9 +55,24 @@ will throw an error if the object contains a duplicate value for the key "idempo
 
 Example:
 
+// Parse Server v3.x
 ```javascript
 Parse.Cloud.beforeSave('MyObject', async request => {
 	await PCIdempotency.checkOnCreate(request, Parse)
+})
+```
+// Parse Server v2.x
+```javascript
+Parse.Cloud.beforeSave('MyObject', (request, response) => {
+	return Parse.Promise.as()
+	.then(()=>{
+	  return PCIdempotency.checkOnCreate(request, Parse)
+	})
+	.then(()=>{
+		response.success('yay');
+	},(error)=>{
+		response.error(error);
+	})
 })
 ```
 
