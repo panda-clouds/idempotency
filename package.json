@@ -1,0 +1,33 @@
+{
+  "name": "@panda-clouds/idempotency",
+  "scripts": {
+    "pretest": "eslint .",
+    "test": "jest --runInBand"
+  },
+  "description": "Ensures that multiple save attempts only result in a single object",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/panda-clouds/idempotency.git"
+  },
+  "author": {
+    "name": "Marc Smith",
+    "email": "mr.marcsmith@me.com",
+    "url": "https://github.com/mrmarcsmith"
+  },
+  "license": "MIT",
+  "main": "src/PCIdempotency.js",
+  "engines": {
+    "node": ">= 8"
+  },
+  "dependencies": {
+    "@panda-clouds/date": "^1.2.0"
+  },
+  "devDependencies": {
+    "@panda-clouds/eslint-config-panda-clouds": "^0.9.0",
+    "@panda-clouds/parse-runner": "^0.2.0",
+    "eslint": "^5.14.1",
+    "jest": "^24.1.0",
+    "parse": "^2.3.2"
+  }
+}
