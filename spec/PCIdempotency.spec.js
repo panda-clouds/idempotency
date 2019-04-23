@@ -10,6 +10,9 @@ describe('test PCIdempotency', () => {
 	const cloud =
 `
 const PCIdempotency = require(__dirname + '/PCIdempotency.js');
+Parse.Cloud.beforeSave('Nada', async request => {
+	await PCIdempotency.checkOnCreate(request, Parse)
+})
 Parse.Cloud.beforeSave('AnyBlock', async request => {
 	await PCIdempotency.checkOnCreate(request, Parse)
 })
@@ -33,6 +36,45 @@ Parse.Cloud.beforeSave('ForceParse', async request => {
 	beforeEach(async () => {
 		await parseRunner.dropDB();
 	}, 1000 * 60 * 2);
+
+	it('should do nothing without idempotencyKey', async () => {
+		expect.assertions(1);
+
+		try {
+			const obj = new Parse.Object('Nada');
+
+			obj.set('random', 'Foo');
+			// if we leave out the await
+			// it throws an error in the env
+			// because its released from the block
+			await obj.save();
+		} catch (e) {
+			// console.log('error');
+		}
+
+		try {
+			const obj2 = new Parse.Object('Nada');
+
+			obj2.set('random', 'Foo');
+			await obj2.save();
+		} catch (e) {
+			// console.log('error');
+		}
+
+		try {
+			const obj3 = new Parse.Object('Nada');
+
+			obj3.set('random', 'Foo');
+			await obj3.save();
+		} catch (e) {
+			// console.log('error');
+		}
+
+		const query = new Parse.Query('Nada');
+		const number = await query.count();
+
+		expect(number).toBe(3);
+	}, 1000 * 20);
 
 	it('should block double save', async () => {
 		expect.assertions(1);
