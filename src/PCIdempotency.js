@@ -13,6 +13,7 @@ class PCIdempotency {
 			const key = obj.get('idempotencyKey');
 
 			await PCIdempotency.check(key, Parse, disableInstanceCheck);
+			obj.unset('idempotencyKey');
 		}
 	}
 
