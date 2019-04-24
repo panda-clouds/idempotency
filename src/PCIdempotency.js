@@ -9,7 +9,7 @@ class PCIdempotency {
 	static async checkOnCreate(request, Parse, disableInstanceCheck) {
 		const obj = request.object;
 
-		if (obj && obj.has('idempotencyKey')) {
+		if (obj && obj.isNew() && obj.has('idempotencyKey')) {
 			const key = obj.get('idempotencyKey');
 
 			await PCIdempotency.check(key, Parse, disableInstanceCheck);

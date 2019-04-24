@@ -95,13 +95,13 @@ Parse.Cloud.beforeSave('ForceParse', (request, response) => {
 		}
 
 		const query = new Parse.Query('Nada');
-		const number = await query.count();
+		const results = await query.find();
 
-		expect(number).toBe(3);
+		expect(results).toHaveLength(3);
 	}, 1000 * 20);
 
 	it('should block double save', async () => {
-		expect.assertions(1);
+		expect.assertions(3);
 
 		try {
 			const obj = new Parse.Object('AnyBlock');
@@ -110,7 +110,10 @@ Parse.Cloud.beforeSave('ForceParse', (request, response) => {
 			// if we leave out the await
 			// it throws an error in the env
 			// because its released from the block
-			await obj.save();
+			const updateObj = await obj.save();
+
+			updateObj.set('updated', 'yuppers');
+			await updateObj.save();
 		} catch (e) {
 			// console.log('error');
 		}
@@ -134,13 +137,18 @@ Parse.Cloud.beforeSave('ForceParse', (request, response) => {
 		}
 
 		const query = new Parse.Query('AnyBlock');
-		const number = await query.count();
+		const results = await query.find();
 
-		expect(number).toBe(1);
+		expect(results).toHaveLength(1);
+
+		const first = results[0];
+
+		expect(first.has('updated')).toBe(true);
+		expect(first.get('updated')).toBe('yuppers');
 	}, 1000 * 20);
 
 	it('should block double save forcing Parse', async () => {
-		expect.assertions(1);
+		expect.assertions(3);
 
 		try {
 			const obj = new Parse.Object('ForceParse');
@@ -149,7 +157,10 @@ Parse.Cloud.beforeSave('ForceParse', (request, response) => {
 			// if we leave out the await
 			// it throws an error in the env
 			// because its released from the block
-			await obj.save();
+			const updateObj = await obj.save();
+
+			updateObj.set('updated', 'oh yeah');
+			await updateObj.save();
 		} catch (e) {
 			// console.log('error');
 		}
@@ -173,9 +184,14 @@ Parse.Cloud.beforeSave('ForceParse', (request, response) => {
 		}
 
 		const query = new Parse.Query('ForceParse');
-		const number = await query.count();
+		const results = await query.find();
 
-		expect(number).toBe(1);
+		expect(results).toHaveLength(1);
+
+		const first = results[0];
+
+		expect(first.has('updated')).toBe(true);
+		expect(first.get('updated')).toBe('oh yeah');
 	}, 1000 * 20);
 
 	it('should block with parse', async () => {
