@@ -1,4 +1,5 @@
-const kIdempotencyError = 'That object was already created.';
+
+const kIdempotencyError = 'That object was already created.'; // DO NOT CHANGE: clients block alerts that start with this phrase
 const cache = [];
 // const PCDate = require('@panda-clouds/date');
 
@@ -20,6 +21,10 @@ class PCIdempotency {
 	// the Parse variable is optional
 	// disableInstanceCheck forces Parse Query. (debug only)
 	static async check(key, Parse, disableInstanceCheck) {
+		if (!key || key === '' || key === null) {
+			return;
+		}
+
 		if (!disableInstanceCheck) {
 			// 1. shallow check on this instance only
 			if (cache.indexOf(key) !== -1) {
