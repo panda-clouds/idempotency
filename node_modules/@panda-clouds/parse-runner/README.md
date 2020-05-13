@@ -26,7 +26,7 @@ Usage
 
 ```javascript
 const PCParseRunner = require('@panda-clouds/parse-runner');
-
+let Parse;
 
 describe('a describe block', () => {
 
@@ -45,7 +45,7 @@ Parse.Cloud.define('myFunction', function(request, response) {
 	// end optional cloud code
 
 	beforeAll(async () => {
-		await parseRunner.startParseServer();
+		Parse = await parseRunner.startParseServer();
 	}, 1000 * 60 * 2);
 
 	afterAll(async () => {

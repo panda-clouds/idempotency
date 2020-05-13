@@ -19,7 +19,7 @@ describe('test PCIdempotency', () => {
 		await PCIdempotency.check(undefined); // eslint-disable-line no-undefined
 		await PCIdempotency.check(undefined); // eslint-disable-line no-undefined
 		expect(1).toBe(1);
-	}, 1000 * 20);
+	});
 
 	it('should NOT block nil, empty string, null, or undefined with Parse', async () => {
 		expect.assertions(1);
@@ -37,5 +37,5 @@ describe('test PCIdempotency', () => {
 		await PCIdempotency.check(undefined, Parse); // eslint-disable-line no-undefined
 		await PCIdempotency.check(undefined, Parse); // eslint-disable-line no-undefined
 		expect(1).toBe(1);
-	}, 1000 * 20);
+	});
 });

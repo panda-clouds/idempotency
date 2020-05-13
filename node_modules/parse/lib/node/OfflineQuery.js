@@ -175,10 +175,11 @@ function matchesKeyConstraints(className, object, objects, key, constraints) {
 
     if (compareTo.__type) {
       compareTo = decode(compareTo);
-    }
+    } // Compare Date Object or Date String
 
-    if (toString.call(compareTo) === '[object Date]') {
-      object[key] = new Date(object[key]);
+
+    if (toString.call(compareTo) === '[object Date]' || typeof compareTo === 'string' && new Date(compareTo) !== 'Invalid Date' && !isNaN(new Date(compareTo))) {
+      object[key] = new Date(object[key].iso ? object[key].iso : object[key]);
     }
 
     switch (condition) {
