@@ -1,5 +1,8 @@
 ## Changelog
 
+### 0.5.0
+- Changed to using Parse.Error when available to leverage error "codes" for silently discarding there errors on the client
+
 ### 0.4.0
 
 - when '', nil, null, undefined, or an empty variable is passed to "check" we know that the user just didn't provide a key VS failing.
