@@ -1,4 +1,5 @@
 
+const kIdempotencyCode = 9001;
 const kIdempotencyError = 'That object was already created.'; // DO NOT CHANGE: clients block alerts that start with this phrase
 const cache = [];
 // const PCDate = require('@panda-clouds/date');
@@ -28,7 +29,13 @@ class PCIdempotency {
 		if (!disableInstanceCheck) {
 			// 1. shallow check on this instance only
 			if (cache.indexOf(key) !== -1) {
-				throw Error(kIdempotencyError + ' (key: ' + key + ')');
+				let errorMessage = kIdempotencyError + ' (key: ' + key + ')';
+				if(Parse){
+					throw new Parse.Error(kIdempotencyCode, errorMessage);
+				}else{
+					throw Error(errorMessage);
+				}
+				
 			}
 
 			cache.push(key);
@@ -45,8 +52,7 @@ class PCIdempotency {
 
 			if (results && results.length > 0) {
 				const object = results[0];
-
-				throw Error(kIdempotencyError + ' (id: ' + object.id + ')');
+				throw new Parse.Error(kIdempotencyCode, kIdempotencyError + ' (id: ' + object.id + ')');
 			}
 
 			const saveObject = new Parse.Object('IdempotencyKey');
