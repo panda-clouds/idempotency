@@ -1,7 +1,7 @@
 {
   "name": "@panda-clouds/idempotency",
   "scripts": {
-    "pretest": "eslint .",
+    "pretest": "eslint --fix .",
     "test": "jest --runInBand"
   },
   "description": "Ensures that multiple save attempts only result in a single object",
